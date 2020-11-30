@@ -1,6 +1,6 @@
 <div class="father" #container>
-    <div #soon1><app-soon1 [broWidth]='soonWidth2' [fatherWidh]='fatherWidth'></app-soon1></div>
-    <div #soon2><app-soon2 [broWidth]='soonWidth1'></app-soon2></div>
+    <div #soon1><app-soon1 #soon1Comp></app-soon1></div>
+    <div #soon2><app-soon2 #soon2Comp></app-soon2></div>
 </div>
 
-<button></button>
+<button (click)="onClick()">Click me!</button>

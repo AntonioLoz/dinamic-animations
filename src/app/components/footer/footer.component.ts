@@ -20,8 +20,7 @@ export class FooterComponent implements OnInit {
   onClick() {
     console.log("TEST[FooterComponent]");
     
-    // this.turnControl ? this.father.move(this.father.soon1) : this.father.move(this.father.soon2);
-    // this.turnControl = !this.turnControl;
+  
   }
 
 }

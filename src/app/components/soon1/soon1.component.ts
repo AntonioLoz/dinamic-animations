@@ -1,38 +1,63 @@
-import { animate, AnimationBuilder, style } from '@angular/animations';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { animate, animation, AnimationBuilder, AnimationFactory, AnimationPlayer, style } from '@angular/animations';
+import { Component, ElementRef, Inject, Injectable, Input, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DistancesService } from 'src/app/service/distancesServices.service';
+
+@Injectable({
+  providedIn: 'root'
+})
 
 @Component({
   selector: 'app-soon1',
   templateUrl: './soon1.component.html',
   styleUrls: ['./soon1.component.css'],
+  animations: []
 })
 export class Soon1Component implements OnInit {
 
-  @ViewChild('container') container: ElementRef;
-  @Input() broWidth: number;
-  @Input() fatherWidh: number;
+  @ViewChild('container') 
+  container: ElementRef;
+  @Input() 
+  broWidth: number;
+  @Input() 
+  fatherWidh: number;
 
+  private $distances: Observable<Map<number, number>>;
+  private distances: Map<number, number>;
 
-  constructor(private builder: AnimationBuilder) {
+  static number: number = 3;
+
+  constructor(private builder: AnimationBuilder, private distanceService: DistancesService) {
+    this.distances = new Map<number, number>();
    }
 
   ngOnInit(): void {
+    this.$distances = this.distanceService.$getDistances();
+    this.$distances.subscribe((distances: Map<number, number>) => {
+      
+      this.distances = distances;
+    });
   }
 
-  animate() {
-    let factory = this.builder.build([
-      animate('3s ease-out', style({left: `${this.getMoveDistance()}px`})),
+  public animate() {
+    
+    
+    let factory: AnimationFactory = this.builder.build([
+      animate('3s ease-out', style({left: `${this.getMoveDistance(this.distances)}px`})),
       animate('3s ease-out', style({left: '0px'}))
     ])
 
-    const player = factory.create(this.container.nativeElement);
+    console.log(this.container.nativeElement);
+    
+
+    const player: AnimationPlayer = factory.create(this.container.nativeElement);
     player.play();
   }
 
-  private getMoveDistance(): number {
+  private getMoveDistance(distances: Map<number, number>): number {    
 
-    console.log(this.broWidth, this.fatherWidh);
+    console.log("TEST[Soon1Component]: '/n'", "S2:", this.distances.get(2), "'/n' Father:", this.distances.get(3));
     
-    return this.fatherWidh - this.broWidth - this.container.nativeElement.clientWidth;
+    return this.distances.get(3) - this.distances.get(2) - this.distances.get(1);
   }
 }
